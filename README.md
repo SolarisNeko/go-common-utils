@@ -1,12 +1,18 @@
 # go sugar
 
-特性:
+# Target
+1. common 工具包
+2. Java Stream / C# LinQ 风格带到 Go
+3. 追加一个泛型特性. 弥补 Go 还没出泛型时的需要
+
+# Feature 特性
+
 1. Java Stream -> Go Stream
 2. Java 泛型 <T> -> Go T
 
 # Download
 ```shell
-go get github.com/SolarisNeko/go-common-utils
+go get -u github.com/SolarisNeko/go-common-utils
 
 ```
 
