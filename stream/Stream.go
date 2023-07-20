@@ -4,14 +4,19 @@ import (
 	"github.com/SolarisNeko/go-common-utils/generic"
 )
 
-type T generic.Type
 type Number generic.Number
 
 // Stream 泛型切片
-type Stream []T
+type Stream []interface{}
+
+// GroupResult 结构表示分组后的结果
+type GroupResult struct {
+	Key    string
+	Values []interface{}
+}
 
 // Filter 方法用于过滤满足条件的元素
-func (stream Stream) Filter(predicate func(T) bool) Stream {
+func (stream Stream) Filter(predicate func(interface{}) bool) Stream {
 	result := make(Stream, 0)
 	for _, item := range stream {
 		if predicate(item) {
@@ -22,7 +27,7 @@ func (stream Stream) Filter(predicate func(T) bool) Stream {
 }
 
 // Map 方法用于对每个元素执行映射操作
-func (stream Stream) Map(mapper func(T) T) Stream {
+func (stream Stream) Map(mapper func(interface{}) interface{}) Stream {
 	result := make(Stream, len(stream))
 	for i, item := range stream {
 		result[i] = mapper(item)
@@ -31,7 +36,7 @@ func (stream Stream) Map(mapper func(T) T) Stream {
 }
 
 // Reduce 方法用于将元素缩减为单个结果
-func (stream Stream) Reduce(initial T, reducer func(T, T) T) T {
+func (stream Stream) Reduce(initial interface{}, reducer func(interface{}, interface{}) interface{}) interface{} {
 	result := initial
 	for _, item := range stream {
 		result = reducer(result, item)
@@ -63,4 +68,16 @@ func Count(stream Stream) int {
 		count++
 	}
 	return count
+}
+
+// GroupBy 方法用于将元素按照条件进行分组，并返回 map[string]interface{}[]
+func (stream Stream) GroupBy(keySelector func(interface{}) string) map[string][]interface{} {
+	groups := make(map[string][]interface{})
+
+	for _, item := range stream {
+		key := keySelector(item)
+		groups[key] = append(groups[key], item)
+	}
+
+	return groups
 }
